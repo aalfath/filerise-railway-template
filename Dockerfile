@@ -28,4 +28,6 @@ COPY --chmod=0755 railway-start.sh /usr/local/bin/railway-start.sh
 COPY --chmod=0644 healthz.php /usr/local/lib/filerise-railway/healthz.php
 COPY --chmod=0644 bootstrap-admin.php /usr/local/lib/filerise-railway/bootstrap-admin.php
 
+RUN chmod 755 /usr/local/lib/filerise-railway
+
 CMD ["/usr/local/bin/railway-start.sh"]
