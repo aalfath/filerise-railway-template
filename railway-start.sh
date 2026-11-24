@@ -35,6 +35,7 @@ chown -R www-data:www-data "$DATA_DIR/users" "$DATA_DIR/metadata" "$DATA_DIR/ses
 chown www-data:www-data "$DATA_DIR/uploads"
 chmod 775 "$DATA_DIR/uploads" "$DATA_DIR/users" "$DATA_DIR/metadata"
 chmod 700 "$DATA_DIR/sessions"
+mkdir -p "$DATA_DIR/metadata/log"; chown www-data:www-data "$DATA_DIR/metadata/log"
 
 # 3) Pristine install: generate the token-encryption key on the volume BEFORE the admin is written
 #    (upstream falls back to a legacy built-in key when users exist without a key file).
