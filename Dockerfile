@@ -12,11 +12,20 @@ RUN a2dismod -q -f ssl >/dev/null 2>&1 || true; \
     printf '%s\n' \
       '# Railway terminates TLS at its edge and sends X-Forwarded-Proto.' \
       'SetEnvIf X-Forwarded-Proto "^https$" HTTPS=on' \
+      '# Plain health path for Railway (it rejects paths with a dot).' \
+      'Alias /healthz /usr/local/lib/filerise-railway/healthz.php' \
+      '<Directory /usr/local/lib/filerise-railway>' \
+      '  Require all denied' \
+      '  <Files healthz.php>' \
+      '    Require all granted' \
+      '  </Files>' \
+      '</Directory>' \
       > /etc/apache2/conf-available/railway-proxy.conf; \
     a2enconf -q railway-proxy; \
     mkdir -p /var/www/metadata/log && apache2ctl -t 2>&1 | grep -q 'Syntax OK' && rm -r /var/www/metadata/log
 
 COPY --chmod=0755 railway-start.sh /usr/local/bin/railway-start.sh
+COPY --chmod=0644 healthz.php /usr/local/lib/filerise-railway/healthz.php
 COPY --chmod=0644 bootstrap-admin.php /usr/local/lib/filerise-railway/bootstrap-admin.php
 
 CMD ["/usr/local/bin/railway-start.sh"]
